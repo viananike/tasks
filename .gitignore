@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# SQLite or other databases
+*.db
+
+# Docker
+*.pid
+*.sock
+
+# VSCode or IDE settings
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+.out
