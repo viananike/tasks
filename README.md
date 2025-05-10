@@ -15,8 +15,6 @@ Whether you're just trying to stay on top of your projects or you want to monito
   - 🛠 Project management
   - 👥 Admin account creation
 
-> This app is meant to be minimal and hackable. Built by someone who loves self-hosting and homelabbing ❤️
-
 ---
 
 ## 📦 Getting Started
@@ -40,13 +38,12 @@ Whether you're just trying to stay on top of your projects or you want to monito
 Here's what might be coming soon (or eventually!):
 
 - [ ] 🗓️ Calendar view
-- [ ] 📬 Email summaries
+- [ ] 📬 Email verification
 - [ ] 🔔 Notification system
 - [ ] 📎 File attachments
-- [ ] 🧩 Plugin system
 - [ ] 📱 Mobile-friendly tweaks
 
-> Got an idea? [Open an issue](https://github.com/yourusername/tasks/issues) or fork the project and go wild!
+> Got an idea? [Open an issue](https://github.com/viananike/tasks/issues) or fork the project and go wild!
 
 ---
 
