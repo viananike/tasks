@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Task Hours Aggregation{% endblock %}
+
+{% block content %}
+        <h1>Task Aggregation View</h1>
+        <div class="tables-wrapper">
+            <!-- Left Table: Current Month Task List -->
+            <div class="table-container">
+                <h2>Tasks for This Month</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Comments</th>
+                            <th>Date</th>
+                            <th>Project</th>
+                            <th>Time (min)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in task_details %}
+                            <tr>
+                                <td>{{ task[0] }}</td>
+                                <td>{{ task[1] }}</td>
+                                <td>{{ task[2] }}</td>
+                                <td>{{ task[3] }}</td>
+                                <td>{{ task[4] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Separator -->
+            <div class="separator"></div>
+
+            <!-- Right Table: Monthly Aggregates -->
+            <div class="table-container">
+                <h2>Monthly Totals</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Total Time (min)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in monthly_totals %}
+                            <tr>
+                                <td>{{ row[0]|format_month }}</td>
+                                <td>{{ row[1] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <a href="/" class="link-button">Back to Home</a>
+{% endblock %}

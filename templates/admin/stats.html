@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Application Statistics</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Total Users</h5>
+            <p class="card-text">{{ user_count }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Total Projects</h5>
+            <p class="card-text">{{ project_count }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Total Tasks</h5>
+            <p class="card-text">{{ task_count }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Users with Admin Privileges</h5>
+            <p class="card-text">{{ admin_count }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Tasks Completed Today</h5>
+            <p class="card-text">{{ tasks_today }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

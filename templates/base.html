@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Task Tracker{% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #EAEAEA;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Navbar styling - fixed at the top of the screen */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #1F1F1F;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-left, .nav-center, .nav-right {
+            display: flex;
+            align-items: center;
+}
+
+        .nav-center {
+            gap: 20px;
+            flex-grow: 1;
+            justify-content: center;
+}
+
+        .nav-right {
+            margin-left: auto;
+        }
+
+        .navbar a {
+            color: #BB86FC;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+            font-weight: bold;
+}
+
+        .navbar a:hover {
+            text-decoration: underline;
+}
+
+        .navbar i {
+            font-size: 20px;
+}
+
+        /* Main content container - pushed down below the navbar */
+        .container {
+            margin-top: 60px; /* Space for the fixed navbar */
+            background-color: #1F1F1F;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #BB86FC;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #EAEAEA;
+        }
+
+        input, textarea, select {
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #333;
+            color: #EAEAEA;
+            font-size: 14px;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #BB86FC;
+        }
+
+        button {
+            background-color: #6200EE;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3700B3;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .response {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .link-button {
+            padding: 10px 20px;
+            background-color: #03DAC6;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .link-button:hover {
+            background-color: #018786;
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .auth-links a {
+            color: #BB86FC;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            text-align: left;
+        }
+
+        a {
+            color: #03DAC6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-left">
+            <a href="/" title="Home"><i class="fa-solid fa-house"></i></a>
+        </div>
+        <div class="nav-center">
+            <a href="/aggregate">Aggregate</a>
+            {% if current_user.is_authenticated %}
+                {% if current_user.is_admin %}
+                    <!-- Admin-specific links -->
+                    <a href="/admin/create_user">Create User</a>
+                    <a href="/admin/logs">Logs</a>
+                    <a href="/admin/stats">Statistics</a>
+                    <a href="/admin/projects">Manage Projects</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="nav-right">
+            <a href="/logout" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
+    </div>
+
+    
+
+    
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        // Select all navbar links
+        const navbarLinks = document.querySelectorAll('.navbar a');
+
+        // Add a click event listener to each link
+        navbarLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                // Remove 'active' class from all links
+                navbarLinks.forEach(link => link.classList.remove('active'));
+                
+                // Add 'active' class to the clicked link
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

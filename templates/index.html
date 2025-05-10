@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Task Tracker{% endblock %}
+
+{% block content %}
+        <h1>Log Your Task</h1>
+
+        {% if current_user.is_authenticated %}
+            <p>Welcome, {{ current_user.username }}!</p>
+
+            <!-- Task Logging Form -->
+            <form id="taskForm">
+                <label for="task">Task:</label>
+                <input type="text" id="task" name="task" required>
+
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments"></textarea>
+
+                <label for="task_date">Date:</label>
+                <input type="date" id="task_date" name="task_date" required>
+
+                <label for="project">Project:</label>
+                <select id="project" name="project">
+                    {% for project in projects %}
+                        <option value="{{ project[0] }}">{{ project[1] }}</option>
+                    {% endfor %}
+                </select>                               
+
+                <label for="time_spent">Time Spent (in minutes):</label>
+                <input type="number" id="time_spent" name="time_spent" required>
+
+                <button type="submit">Submit</button>
+            </form>
+
+            <div class="response" id="response"></div>
+            <form method="GET" action="/" style="margin-bottom: 20px;">
+                <label for="project_filter">Project:</label>
+                <select name="project_filter" id="project_filter">
+                    <option value="">All</option>
+                    {% for project in projects %}
+                        <option value="{{ project[1] }}" {% if request.args.get('project_filter', '') == project[1] %}selected{% endif %}>
+                            {{ project[1] }}
+                        </option>
+                    {% endfor %}
+                </select>
+            
+                <label for="start_date">From:</label>
+                <input type="date" name="start_date" value="{{ request.args.get('start_date', current_date) }}">
+            
+                <label for="end_date">To:</label>
+                <input type="date" name="end_date" value="{{ request.args.get('end_date', current_date) }}">
+            
+                <button type="submit">Apply Filter</button>
+            </form>            
+            
+            <!-- Today's Tasks Table -->
+            <h2 style="margin-top: 40px;">Filtered Tasks</h2>
+            <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Comments</th>
+                        <th>Time Spent</th>
+                        <th>Date</th>
+                        <th>Project</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                        <tr>
+                            <td>{{ task[1] }}</td>
+                            <td>{{ task[2] }}</td>
+                            <td>{{ task[4] }}</td>
+                            <td>{{ task[3] }}</td>
+                            <td>{{ task[5] }}</td>
+                            <td>
+                                <a href="/edit_task/{{ task[0] }}" style="color:#03DAC6;">Edit</a> |
+                                <a href="/delete_task/{{ task[0] }}" onclick="return confirm('Delete this task?');" style="color:#CF6679;">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {% else %}
+            <p style="text-align:center;">You must <a href="/login">log in</a> to log tasks.</p>
+            <div class="auth-links">
+                <a href="/login">Login</a> | <a href="/signup">Sign up</a>
+            </div>
+        {% endif %}
+
+    <script>
+        $("#taskForm").submit(function(event) {
+            event.preventDefault();
+
+            var task = $("#task").val();
+            var comments = $("#comments").val();
+            var project = $("#project").val();
+            var time_spent = parseInt($("#time_spent").val());
+            var task_date = $("#task_date").val();
+
+            $.ajax({
+                url: "/submit",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    task: task,
+                    comments: comments,
+                    task_date: task_date,
+                    project: project,
+                    time_spent: time_spent
+                }),
+                success: function(response) {
+                    $("#response").html("<p style='color: green;'>Task saved successfully!</p>");
+                    $("#taskForm")[0].reset();
+                    setTimeout(() => location.reload(), 1000);  // Auto-refresh to show task
+                },
+                error: function(error) {
+                    $("#response").html("<p style='color: red;'>Error: Could not save the task.</p>");
+                }
+            });
+        });
+    </script>
+{% endblock %}

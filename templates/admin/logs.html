@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Application Logs</h2>
+    
+    <!-- Check if logs are available -->
+    {% if logs %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Log Entry</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td><pre>{{ log }}</pre></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No logs available.</p>
+    {% endif %}
+{% endblock %}

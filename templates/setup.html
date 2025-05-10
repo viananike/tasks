@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Setup{% endblock %}
+
+{% block content %}
+<h1>Initial Admin Setup</h1>
+<form method="POST">
+    <label for="username">Username:</label>
+    <input type="text" name="username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" required>
+
+    <button type="submit">Create Admin</button>
+</form>
+{% endblock %}
