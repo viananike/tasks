@@ -19,19 +19,36 @@ Whether you're just trying to stay on top of your projects or you want to monito
 
 ## 📦 Getting Started
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/viananike/tasks.git
-   cd tasks
-2. Copy the example environment file and fill in your own values:
-   ```bash
-   cp .env.example .env
-3. Run with docker:
-   ```bash
-   docker compose up --build
-4. Visit http://ip:5000 and set up your admin account!
+### 1. Create a `docker-compose.yml`
 
-After you've initially built the application, created your admin account and checked that everything is working you can then Ctrl + C to close and then run docker compose up -d
+Make a `docker-compose.yml` file with the following content:
+
+```yaml
+services:
+  web:
+    image: ghcr.io/viananike/tasks:latest
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mytestdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+
 
 ---
 
