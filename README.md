@@ -19,36 +19,39 @@ Whether you're just trying to stay on top of your projects or you want to monito
 
 ## 📦 Getting Started
 
-### 1. Create a `docker-compose.yml`
+1. Create a docker-compose.yml
+   ```yaml
 
-Make a `docker-compose.yml` file with the following content:
+   services:
+   web:
+      image: ghcr.io/viananike/tasks:latest
+      ports:
+         - "5000:5000"
+      env_file:
+         - .env
+      depends_on:
+         - db
 
-```yaml
-services:
-  web:
-    image: ghcr.io/viananike/tasks:latest
-    ports:
-      - "5000:5000"
-    env_file:
-      - .env
-    depends_on:
-      - db
+   db:
+      image: postgres:13
+      environment:
+         POSTGRES_USER: postgres
+         POSTGRES_PASSWORD: postgres
+         POSTGRES_DB: mytestdb
+      volumes:
+         - postgres_data:/var/lib/postgresql/data
+         - ./db/init:/docker-entrypoint-initdb.d
+      ports:
+         - "5432:5432"
 
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mytestdb
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
-    ports:
-      - "5432:5432"
-
-volumes:
-  postgres_data:
-
+   volumes:
+   postgres_data:
+   ```
+2. Create a .env file and fill it in with the variables necessary (Look at the .env.example in this repository)
+3. Run with docker:
+   ```bash
+   docker compose up -d
+4. Visit http://ip-of-your-machine:5000 and set up your admin account!
 
 ---
 
