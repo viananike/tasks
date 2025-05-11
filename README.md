@@ -37,6 +37,10 @@ Follow these steps to run the app locally or on a remote machine using Docker:
    ```bash
    cp .env.example .env
    ```
+   Run the following command to add a secret key to your .env:
+   ```bash
+   echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
+   ```
 3. **Run with docker:**
    ```bash
    docker compose up -d
