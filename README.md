@@ -25,11 +25,13 @@ Whether you're just trying to stay on top of your projects or you want to monito
    cd tasks
 2. Copy the example environment file and fill in your own values:
    ```bash
-   cp .env.example.env
+   cp .env.example .env
 3. Run with docker:
    ```bash
-   docker compose up -d
+   docker compose up --build
 4. Visit http://ip:5000 and set up your admin account!
+
+After you've initially built the application, created your admin account and checked that everything is working you can then Ctrl + C to close and then run docker compose up -d
 
 ---
 
