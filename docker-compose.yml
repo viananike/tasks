@@ -9,9 +9,6 @@ services:
       - db
 
   db:
-    build:
-      context: .
-      dockerfile: db/Dockerfile  # This is the new Dockerfile for Postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
