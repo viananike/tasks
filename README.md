@@ -50,6 +50,7 @@ Follow these steps to run the app locally or on a remote machine using Docker:
 Here's what might be coming soon (or eventually!):
 
 - [ ] 🗓️ Calendar view
+- [ ] 🌓 Light & Dark mode toggle
 - [ ] 📬 Email verification
 - [ ] 🔔 Notification system
 - [ ] 📎 File attachments
