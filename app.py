@@ -308,11 +308,22 @@ def create_user():
 
         hashed_pw = generate_password_hash(password)
         cur.execute("INSERT INTO users (username, password_hash, is_admin) VALUES (%s, %s, %s)",
-                    (username, hashed_pw, is_admin))
+                    (username, hashed_pw, bool(is_admin)))
         conn.commit()
         return redirect("/admin/users")
 
     return render_template("admin/create_user.html")
+
+@app.route("/admin/users")
+@login_required
+def list_users():
+    if not current_user.is_admin:
+        return "Access denied", 403
+    
+    cur.execute("SELECT user_id, username, is_admin FROM users")
+    users = cur.fetchall()
+    return render_template("admin/users.html", users=users)
+
 
 @app.route("/admin/logs")
 @login_required
