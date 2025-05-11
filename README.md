@@ -23,11 +23,13 @@ Follow these steps to run the app locally or on a remote machine using Docker:
 
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/viananike/tasks.git
+   cd tasks
    ```
 2. **Create a .env file**
+   
    Copy the example file and fill in your own configuration values:
+   
    ```bash
    cp .env.example .env
    ```
