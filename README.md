@@ -42,7 +42,9 @@ Follow these steps to run the app locally or on a remote machine using Docker:
    echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
    ```
    ⚠️ **Security Tip**
+   
    It is *strongly recommended* to change the default database credentials in your .env file. Make sure these values match what's defined under the db service in your docker-compose.yml
+   
 3. **Run with docker:**
    ```bash
    docker compose up -d
