@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, flash, get_flashed_messages
 from flask_cors import CORS
 import psycopg2
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
@@ -74,7 +74,9 @@ def signup():
 
         cur.execute("SELECT user_id FROM users WHERE username = %s", (username,))
         if cur.fetchone():
-            return "Username already exists. Please choose another."
+            flash("Username already exists. Please choose another.", "warning")
+            return redirect(url_for("signup"))
+
 
         hashed_pw = generate_password_hash(password)
         cur.execute(
@@ -100,7 +102,9 @@ def login():
             login_user(user)
             return redirect(request.args.get('next') or "/")
 
-        return "Invalid credentials."
+        flash("Invalid username or password", "danger")
+        return redirect(url_for("login"))
+
     return render_template("login.html")
 
 @app.route("/logout")
