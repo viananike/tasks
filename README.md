@@ -1,5 +1,7 @@
 # 📝 Tasks — A Simple & Powerful Task Tracker
 
+![App Logo](Logo/logo.png)
+
 Welcome to **Tasks**, a lightweight but powerful self-hostable task tracker built with Flask & Docker.  
 Whether you're just trying to stay on top of your projects or you want to monitor a team's progress, **Tasks** has you covered.
 
