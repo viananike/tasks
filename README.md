@@ -3,6 +3,7 @@
 <div align="center">
   <img src="Logo/logo.png" alt="App Logo" width="200"/>
 </div>
+
 Welcome to **Tasks**, a lightweight but powerful self-hostable task tracker built with Flask & Docker.  
 Whether you're just trying to stay on top of your projects or you want to monitor a team's progress, **Tasks** has you covered.
 
