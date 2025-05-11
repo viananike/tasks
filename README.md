@@ -21,7 +21,7 @@ Whether you're just trying to stay on top of your projects or you want to monito
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/yourusername/tasks.git
+   git clone https://github.com/viananike/tasks.git
    cd tasks
 2. Copy the example environment file and fill in your own values:
    ```bash
