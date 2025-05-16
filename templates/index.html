@@ -3,92 +3,97 @@
 {% block title %}Task Tracker{% endblock %}
 
 {% block content %}
-        <h1>Log Your Task</h1>
+    <h1>Log Your Task</h1>
 
-        {% if current_user.is_authenticated %}
-            <p>Welcome, {{ current_user.username }}!</p>
+    {% if current_user.is_authenticated %}
+        <p style="text-align: center;">Welcome, {{ current_user.username }}!</p>
 
-            <!-- Task Logging Form -->
-            <form id="taskForm">
-                <label for="task">Task:</label>
-                <input type="text" id="task" name="task" required>
+        <!-- Task Logging Form -->
+        <form id="taskForm" style="display: flex; flex-direction: column; gap: 15px; background-color: #2a2a2a; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2); margin-top: 20px;">
+            <label for="task">Task:</label>
+            <input type="text" id="task" name="task" required style="padding: 10px; border: none; border-radius: 6px; background-color: #1e1e1e; color: #EAEAEA;">
 
-                <label for="comments">Comments:</label>
-                <textarea id="comments" name="comments"></textarea>
+            <label for="comments">Comments:</label>
+            <textarea id="comments" name="comments" rows="3" style="padding: 10px; border: none; border-radius: 6px; background-color: #1e1e1e; color: #EAEAEA;"></textarea>
 
-                <label for="task_date">Date:</label>
-                <input type="date" id="task_date" name="task_date" required>
+            <label for="task_date">Date:</label>
+            <input type="date" id="task_date" name="task_date" required style="padding: 10px; border: none; border-radius: 6px; background-color: #1e1e1e; color: #EAEAEA;">
 
-                <label for="project">Project:</label>
-                <select id="project" name="project">
-                    {% for project in projects %}
-                        <option value="{{ project[0] }}">{{ project[1] }}</option>
-                    {% endfor %}
-                </select>                               
+            <label for="project">Project:</label>
+            <select id="project" name="project" style="padding: 10px; border: none; border-radius: 6px; background-color: #1e1e1e; color: #EAEAEA;">
+                {% for project in projects %}
+                    <option value="{{ project[0] }}">{{ project[1] }}</option>
+                {% endfor %}
+            </select>
 
-                <label for="time_spent">Time Spent (in minutes):</label>
-                <input type="number" id="time_spent" name="time_spent" required>
+            <label for="time_spent">Time Spent (in minutes):</label>
+            <input type="number" id="time_spent" name="time_spent" required style="padding: 10px; border: none; border-radius: 6px; background-color: #1e1e1e; color: #EAEAEA;">
 
-                <button type="submit">Submit</button>
-            </form>
+            <button type="submit" style="padding: 10px; background-color: #BB86FC; color: #121212; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: background 0.3s;">
+                Submit
+            </button>
+        </form>
 
-            <div class="response" id="response"></div>
-            <form method="GET" action="/" style="margin-bottom: 20px;">
-                <label for="project_filter">Project:</label>
-                <select name="project_filter" id="project_filter">
-                    <option value="">All</option>
-                    {% for project in projects %}
-                        <option value="{{ project[1] }}" {% if request.args.get('project_filter', '') == project[1] %}selected{% endif %}>
-                            {{ project[1] }}
-                        </option>
-                    {% endfor %}
-                </select>
-            
-                <label for="start_date">From:</label>
-                <input type="date" name="start_date" value="{{ request.args.get('start_date', current_date) }}">
-            
-                <label for="end_date">To:</label>
-                <input type="date" name="end_date" value="{{ request.args.get('end_date', current_date) }}">
-            
-                <button type="submit">Apply Filter</button>
-            </form>            
-            
-            <!-- Today's Tasks Table -->
-            <h2 style="margin-top: 40px;">Filtered Tasks</h2>
-            <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th>Task</th>
-                        <th>Comments</th>
-                        <th>Time Spent</th>
-                        <th>Date</th>
-                        <th>Project</th>
-                        <th>Actions</th>
+        <div class="response" id="response" style="margin-top: 15px; text-align: center;"></div>
+
+        <!-- Filter Form -->
+        <form method="GET" action="/" style="margin: 30px 0; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;">
+            <label for="project_filter">Project:</label>
+            <select name="project_filter" id="project_filter" style="padding: 8px; background-color: #1e1e1e; color: #EAEAEA; border: none; border-radius: 6px;">
+                <option value="">All</option>
+                {% for project in projects %}
+                    <option value="{{ project[1] }}" {% if request.args.get('project_filter', '') == project[1] %}selected{% endif %}>
+                        {{ project[1] }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="start_date">From:</label>
+            <input type="date" name="start_date" value="{{ request.args.get('start_date', current_date) }}" style="padding: 8px; border: none; border-radius: 6px; background-color: #1e1e1e; color: #EAEAEA;">
+
+            <label for="end_date">To:</label>
+            <input type="date" name="end_date" value="{{ request.args.get('end_date', current_date) }}" style="padding: 8px; border: none; border-radius: 6px; background-color: #1e1e1e; color: #EAEAEA;">
+
+            <button type="submit" style="padding: 10px 20px; background-color: #03DAC6; color: #121212; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;">
+                Apply Filter
+            </button>
+        </form>
+
+        <!-- Tasks Table -->
+        <h2 style="margin-top: 40px;">Filtered Tasks</h2>
+        <table style="width: 100%; margin-top: 10px; border-collapse: collapse; background-color: #1e1e1e; border-radius: 8px; overflow: hidden;">
+            <thead>
+                <tr style="background-color: #2a2a2a;">
+                    <th style="padding: 12px; text-align: left;">Task</th>
+                    <th style="padding: 12px; text-align: left;">Comments</th>
+                    <th style="padding: 12px; text-align: left;">Time Spent</th>
+                    <th style="padding: 12px; text-align: left;">Date</th>
+                    <th style="padding: 12px; text-align: left;">Project</th>
+                    <th style="padding: 12px; text-align: left;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr style="border-top: 1px solid #333;">
+                        <td style="padding: 10px;">{{ task[1] }}</td>
+                        <td style="padding: 10px;">{{ task[2] }}</td>
+                        <td style="padding: 10px;">{{ task[4] }}</td>
+                        <td style="padding: 10px;">{{ task[3] }}</td>
+                        <td style="padding: 10px;">{{ task[5] }}</td>
+                        <td style="padding: 10px;">
+                            <a href="/edit_task/{{ task[0] }}" style="color:#03DAC6;">Edit</a> |
+                            <a href="/delete_task/{{ task[0] }}" onclick="return confirm('Delete this task?');" style="color:#CF6679;">Delete</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for task in tasks %}
-                        <tr>
-                            <td>{{ task[1] }}</td>
-                            <td>{{ task[2] }}</td>
-                            <td>{{ task[4] }}</td>
-                            <td>{{ task[3] }}</td>
-                            <td>{{ task[5] }}</td>
-                            <td>
-                                <a href="/edit_task/{{ task[0] }}" style="color:#03DAC6;">Edit</a> |
-                                <a href="/delete_task/{{ task[0] }}" onclick="return confirm('Delete this task?');" style="color:#CF6679;">Delete</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-        {% else %}
-            <p style="text-align:center;">You must <a href="/login">log in</a> to log tasks.</p>
-            <div class="auth-links">
-                <a href="/login">Login</a> | <a href="/signup">Sign up</a>
-            </div>
-        {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="text-align:center;">You must <a href="/login">log in</a> to log tasks.</p>
+        <div class="auth-links" style="text-align: center; margin-top: 20px;">
+            <a href="/login">Login</a> | <a href="/signup">Sign up</a>
+        </div>
+    {% endif %}
 
     <script>
         $("#taskForm").submit(function(event) {
@@ -112,12 +117,12 @@
                     time_spent: time_spent
                 }),
                 success: function(response) {
-                    $("#response").html("<p style='color: green;'>Task saved successfully!</p>");
+                    $("#response").html("<p style='color: #03DAC6;'>Task saved successfully!</p>");
                     $("#taskForm")[0].reset();
-                    setTimeout(() => location.reload(), 1000);  // Auto-refresh to show task
+                    setTimeout(() => location.reload(), 1000);
                 },
                 error: function(error) {
-                    $("#response").html("<p style='color: red;'>Error: Could not save the task.</p>");
+                    $("#response").html("<p style='color: #CF6679;'>Error: Could not save the task.</p>");
                 }
             });
         });
