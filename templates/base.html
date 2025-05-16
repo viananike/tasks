@@ -17,17 +17,6 @@
         padding: 0;
         min-height: 100vh;
         overflow-x: hidden;
-        display: block;
-    }
-
-    .container {
-        flex-grow: 1;
-        padding: 20px;
-        margin-top: 0;
-        width: 100%;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
     }
 
     /* Sidebar Styles */
@@ -70,13 +59,31 @@
         left: 0;
     }
 
+    /* Main content wrapper */
+    .main-content {
+        margin-left: 0;
+        transition: margin-left 0.3s ease;
+        padding: 20px;
+    }
+
+    .sidebar.open ~ .main-content {
+        margin-left: 250px;
+    }
+
+    /* Actual content container */
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
     h1, h2, h3 {
         text-align: center;
         color: #BB86FC;
     }
-
-    /* Form and table styling remains unchanged... */
-    /* ... */
   </style>
 </head>
 <body>
@@ -101,14 +108,20 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container">
-        {% block content %}{% endblock %}
+    <div class="main-content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
     </div>
 
     <script>
       // Toggle sidebar open/close
-      document.querySelector('.menu-toggle').addEventListener('click', () => {
-          document.getElementById('sidebar').classList.toggle('open');
+      const menuToggle = document.querySelector('.menu-toggle');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.querySelector('.main-content');
+
+      menuToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('open');
       });
     </script>
 </body>
