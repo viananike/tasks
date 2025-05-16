@@ -8,16 +8,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">    
   <style>
-    /* Base Styles (unchanged) */
+    /* Base Styles */
     body {
         font-family: Arial, sans-serif;
         background-color: #121212;
         color: #EAEAEA;
         margin: 0;
         padding: 0;
-        display: flex;
-        height: 100vh;
+        min-height: 100vh;
         overflow-x: hidden;
+        display: block;
     }
 
     .container {
@@ -82,7 +82,7 @@
 <body>
     <!-- Menu Toggle Button -->
     <div class="menu-toggle">
-        <i class="fas fa-ellipsis-v"></i>
+        <i class="fas fa-bars"></i>
     </div>
 
     <!-- Sidebar Menu -->
