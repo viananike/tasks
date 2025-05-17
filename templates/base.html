@@ -11,11 +11,26 @@
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">    
 
   <style>
-    /* Base Styles */
+    :root {
+      --bg-color: #121212;
+      --text-color: #EAEAEA;
+      --container-bg: #1e1e1e;
+      --link-color: #BB86FC;
+      --hover-bg: #333;
+    }
+
+    body.light-mode {
+      --bg-color: #f4f4f4;
+      --text-color: #222;
+      --container-bg: #fff;
+      --link-color: #5a32c3;
+      --hover-bg: #ddd;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #EAEAEA;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       margin: 0;
       padding: 0;
       min-height: 100vh;
@@ -25,10 +40,9 @@
       text-decoration: none;
     }
 
-    /* Sidebar Styles */
     .sidebar {
       width: 250px;
-      background-color: #1F1F1F;
+      background-color: var(--container-bg);
       position: fixed;
       top: 0;
       left: -250px;
@@ -41,13 +55,13 @@
 
     .sidebar a {
       display: block;
-      color: #BB86FC;
+      color: var(--link-color);
       padding: 15px 20px;
       font-weight: bold;
     }
 
     .sidebar a:hover {
-      background-color: #333;
+      background-color: var(--hover-bg);
     }
 
     .sidebar h3 {
@@ -63,23 +77,30 @@
       margin: 10px 0;
     }
 
-    /* Menu Toggle Button */
     .menu-toggle {
       position: fixed;
       top: 15px;
       left: 15px;
       font-size: 24px;
-      color: #BB86FC;
+      color: var(--link-color);
       cursor: pointer;
       z-index: 1100;
     }
 
-    /* Sidebar Open State */
+    .theme-toggle {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      color: var(--link-color);
+      cursor: pointer;
+      z-index: 1100;
+    }
+
     .sidebar.open {
       left: 0;
     }
 
-    /* Main content */
     .main-content {
       margin-left: 0;
       transition: margin-left 0.3s ease;
@@ -90,22 +111,20 @@
       margin-left: 250px;
     }
 
-    /* Container for actual page content */
     .container {
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
-      background-color: #1e1e1e;
+      background-color: var(--container-bg);
       border-radius: 12px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
     h1, h2, h3 {
       text-align: center;
-      color: #BB86FC;
+      color: var(--link-color);
     }
 
-    /* Responsive Adjustments */
     @media (max-width: 768px) {
       .sidebar {
         width: 200px;
@@ -124,9 +143,12 @@
 </head>
 
 <body>
-  <!-- Toggle Sidebar -->
+  <!-- Menu and Theme Toggle Buttons -->
   <div class="menu-toggle" aria-label="Toggle sidebar" role="button" tabindex="0">
     <i class="fas fa-bars"></i>
+  </div>
+  <div class="theme-toggle" aria-label="Toggle theme" role="button" tabindex="0">
+    <i class="fas fa-moon"></i>
   </div>
 
   <!-- Sidebar Navigation -->
@@ -153,8 +175,8 @@
     </div>
   </main>
 
-  <!-- Sidebar Toggle Script -->
   <script>
+    // Sidebar toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const sidebar = document.getElementById('sidebar');
 
@@ -162,11 +184,30 @@
       sidebar.classList.toggle('open');
     });
 
-    // Optional: allow closing the sidebar by clicking outside (mobile UX)
-    document.addEventListener('click', (e) => {
-      if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
-        sidebar.classList.remove('open');
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    const icon = themeToggle.querySelector('i');
+
+    function setTheme(mode) {
+      if (mode === 'light') {
+        document.body.classList.add('light-mode');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        document.body.classList.remove('light-mode');
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
       }
+      localStorage.setItem('theme', mode);
+    }
+
+    // Load stored theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.body.classList.contains('light-mode');
+      setTheme(isLight ? 'dark' : 'light');
     });
   </script>
 </body>
