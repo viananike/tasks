@@ -4,140 +4,170 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{% block title %}Task Tracker{% endblock %}</title>
+
+  <!-- jQuery & FontAwesome -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">    
+
   <style>
     /* Base Styles */
     body {
-        font-family: Arial, sans-serif;
-        background-color: #121212;
-        color: #EAEAEA;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #EAEAEA;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
     }
 
     /* Sidebar Styles */
     .sidebar {
-        width: 250px;
-        background-color: #1F1F1F;
-        position: fixed;
-        top: 0;
-        left: -250px;
-        height: 100%;
-        padding-top: 60px;
-        transition: left 0.3s ease;
-        z-index: 1000;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+      width: 250px;
+      background-color: #1F1F1F;
+      position: fixed;
+      top: 0;
+      left: -250px;
+      height: 100%;
+      padding-top: 60px;
+      transition: left 0.3s ease;
+      z-index: 1000;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     }
 
     .sidebar a {
-        display: block;
-        color: #BB86FC;
-        padding: 15px 20px;
-        text-decoration: none;
-        font-weight: bold;
+      display: block;
+      color: #BB86FC;
+      padding: 15px 20px;
+      font-weight: bold;
     }
 
     .sidebar a:hover {
-        background-color: #333;
-    }
-
-    .menu-toggle {
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        font-size: 24px;
-        color: #BB86FC;
-        cursor: pointer;
-        z-index: 1100;
-    }
-
-    .sidebar.open {
-        left: 0;
-    }
-
-    /* Main content wrapper */
-    .main-content {
-        margin-left: 0;
-        transition: margin-left 0.3s ease;
-        padding: 20px;
-    }
-
-    .sidebar.open ~ .main-content {
-        margin-left: 250px;
-    }
-
-    /* Actual content container */
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #1e1e1e;
-        border-radius: 12px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-
-    h1, h2, h3 {
-        text-align: center;
-        color: #BB86FC;
+      background-color: #333;
     }
 
     .sidebar h3 {
-        padding: 0 20px;
-        color: #888;
-        font-size: 14px;
-        margin: 10px 0 5px;
+      padding: 0 20px;
+      color: #888;
+      font-size: 14px;
+      margin: 10px 0 5px;
     }
 
     .sidebar hr {
-        border: none;
-        border-top: 1px solid #333;
-        margin: 10px 0;
+      border: none;
+      border-top: 1px solid #333;
+      margin: 10px 0;
+    }
+
+    /* Menu Toggle Button */
+    .menu-toggle {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      font-size: 24px;
+      color: #BB86FC;
+      cursor: pointer;
+      z-index: 1100;
+    }
+
+    /* Sidebar Open State */
+    .sidebar.open {
+      left: 0;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 0;
+      transition: margin-left 0.3s ease;
+      padding: 20px;
+    }
+
+    .sidebar.open ~ .main-content {
+      margin-left: 250px;
+    }
+
+    /* Container for actual page content */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+      color: #BB86FC;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+      }
+
+      .sidebar.open ~ .main-content {
+        margin-left: 0;
+      }
+
+      .main-content {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
     }
   </style>
 </head>
+
 <body>
-    <!-- Menu Toggle Button -->
-    <div class="menu-toggle">
-        <i class="fas fa-bars"></i>
+  <!-- Toggle Sidebar -->
+  <div class="menu-toggle" aria-label="Toggle sidebar" role="button" tabindex="0">
+    <i class="fas fa-bars"></i>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar" id="sidebar">
+    <a href="/">🏠 Home</a>
+    <a href="/aggregate">📊 Aggregate</a>
+    {% if current_user.is_authenticated %}
+      {% if current_user.is_admin %}
+        <hr>
+        <h3>Admin</h3>
+        <a href="/admin/create_user">👤 Create User</a>
+        <a href="/admin/logs">📄 Logs</a>
+        <a href="/admin/stats">📈 Statistics</a>
+        <a href="/admin/projects">📁 Manage Projects</a>
+      {% endif %}
+      <a href="/logout">🚪 Logout</a>
+    {% endif %}
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="container">
+      {% block content %}{% endblock %}
     </div>
+  </main>
 
-    <!-- Sidebar Menu -->
-    <div class="sidebar" id="sidebar">
-        <a href="/">🏠 Home</a>
-        <a href="/aggregate">📊 Aggregate</a>
-        {% if current_user.is_authenticated %}
-            {% if current_user.is_admin %}
-                <hr>
-                <h3>Admin</h3>
-                <a href="/admin/create_user">👤 Create User</a>
-                <a href="/admin/logs">📄 Logs</a>
-                <a href="/admin/stats">📈 Statistics</a>
-                <a href="/admin/projects">📁 Manage Projects</a>
-            {% endif %}
-            <a href="/logout">🚪 Logout</a>
-        {% endif %}
-    </div>
+  <!-- Sidebar Toggle Script -->
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.getElementById('sidebar');
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
 
-    <script>
-      // Toggle sidebar open/close
-      const menuToggle = document.querySelector('.menu-toggle');
-      const sidebar = document.getElementById('sidebar');
-      const mainContent = document.querySelector('.main-content');
-
-      menuToggle.addEventListener('click', () => {
-          sidebar.classList.toggle('open');
-      });
-    </script>
+    // Optional: allow closing the sidebar by clicking outside (mobile UX)
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+        sidebar.classList.remove('open');
+      }
+    });
+  </script>
 </body>
 </html>
