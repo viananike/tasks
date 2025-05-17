@@ -239,6 +239,30 @@ def aggregate():
 
     return render_template("aggregate.html", task_details=task_details, monthly_totals=monthly_totals)
 
+@app.route("/calendar")
+def calendar_view():
+    conn = psycopg2.connect(...)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 
+            task_date, 
+            SUM(EXTRACT(EPOCH FROM time_spent))/3600 AS hours_spent
+        FROM tasks
+        WHERE task_date >= date_trunc('month', CURRENT_DATE)
+          AND task_date < (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month')
+        GROUP BY task_date
+        ORDER BY task_date;
+    """)
+    results = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    calendar_data = [{"date": row[0].isoformat(), "hours_spent": float(row[1])} for row in results]
+    calendar_grid = get_calendar_grid(calendar_data)
+
+    return render_template("calendar.html", calendar_grid=calendar_grid)
+
+
 @app.template_filter('format_month')
 def format_month(value):
     try:

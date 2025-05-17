@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Task Hours Calendar{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center; color: #BB86FC;">Task Hours Calendar View</h1>
+
+<div style="max-width: 900px; margin: 30px auto;">
+
+    <table style="width: 100%; border-collapse: collapse; background-color: #2a2a2a; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+        <thead>
+            <tr style="background-color: #3b3b3b; color: #BB86FC;">
+                <th style="padding: 12px;">Sun</th>
+                <th style="padding: 12px;">Mon</th>
+                <th style="padding: 12px;">Tue</th>
+                <th style="padding: 12px;">Wed</th>
+                <th style="padding: 12px;">Thu</th>
+                <th style="padding: 12px;">Fri</th>
+                <th style="padding: 12px;">Sat</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in calendar_grid %}
+            <tr>
+                {% for day in week %}
+                {% if day %}
+                    <td style="padding: 15px; border: 1px solid #444; vertical-align: top;
+                        {% if day.is_today %} background-color: #5E35B1; {% elif day.is_weekend %} background-color: #3b3b3b; {% else %} background-color: #2a2a2a; {% endif %}
+                        color: #fff; text-align: left; min-height: 80px;">
+                        <strong>{{ day.day }}</strong><br>
+                        <small>Hours: {{ day.hours_spent|default(0) }}</small>
+                    </td>
+                {% else %}
+                    <td style="background-color: #1a1a1a; border: 1px solid #444;"></td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<div style="text-align: center; margin-top: 40px;">
+    <a href="/" class="link-button" style="background-color: #BB86FC; color: #121212; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">Back to Home</a>
+</div>
+
+{% endblock %}
