@@ -9,6 +9,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from dotenv import load_dotenv
 import os
+import calendar
 
 load_dotenv()
 
@@ -64,6 +65,34 @@ def load_user(user_id):
     if user_data:
         return User(id_=user_data[0], username=user_data[1], password_hash=user_data[2], is_admin=user_data[3])
     return None
+
+def get_calendar_grid(calendar_data):
+    # Prepare a dict for quick lookup by date string
+    data_map = {item["date"]: item["hours_spent"] for item in calendar_data}
+
+    today = date.today()
+    year, month = today.year, today.month
+
+    # Get month calendar weeks: each week is a list of 7 days (0 means no day)
+    month_cal = calendar.monthcalendar(year, month)
+
+    grid = []
+    for week in month_cal:
+        week_list = []
+        for day in week:
+            if day == 0:
+                week_list.append(None)
+            else:
+                day_date = date(year, month, day)
+                iso_day = day_date.isoformat()
+                week_list.append({
+                    "day": day,
+                    "hours_spent": data_map.get(iso_day, 0),
+                    "is_today": day_date == today,
+                    "is_weekend": day_date.weekday() >= 5  # 5=Saturday, 6=Sunday
+                })
+        grid.append(week_list)
+    return grid
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
