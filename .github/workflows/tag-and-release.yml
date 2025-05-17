@@ -20,18 +20,17 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_bump: false
+          default_bump: patch
           release_branches: main
 
       # 2️⃣ Generate release notes from commits
       - name: Generate release notes
         id: notes
         run: |
-          RELEASE_NOTES=$(git log --pretty=format:"- %s (%an)" $(git describe --tags --abbrev=0)..HEAD)
-          RELEASE_NOTES="${RELEASE_NOTES//'%'/'%25'}"
-          RELEASE_NOTES="${RELEASE_NOTES//$'\n'/'%0A'}"
-          RELEASE_NOTES="${RELEASE_NOTES//$'\r'/'%0D'}"
-          echo "release_notes=$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          git log --pretty=format:"- %s (%an)" $(git describe --tags --abbrev=0)..HEAD >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
 
       # 3️⃣ Update CHANGELOG.md with new section
       - name: Update CHANGELOG.md
