@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.1.7 - 2025-05-17
+
+- Merge branch 'main' of https://github.com/viananike/tasks (Viananike)%0A- fix: moving back from postgres 17.5 to 13 because nothing works (Viananike)%0A- chore: update changelog for v1.1.6 (github-actions)
+
 ## v1.1.6 - 2025-05-17
 
 - Merge branch 'main' of https://github.com/viananike/tasks (Viananike)%0A- changing readme (Viananike)%0A- chore: update changelog for v1.1.5 (github-actions)
