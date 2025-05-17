@@ -3,7 +3,7 @@ from flask_cors import CORS
 import psycopg2
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import time
 import logging
 from logging.handlers import RotatingFileHandler
@@ -66,14 +66,13 @@ def load_user(user_id):
         return User(id_=user_data[0], username=user_data[1], password_hash=user_data[2], is_admin=user_data[3])
     return None
 
-def get_calendar_grid(calendar_data):
-    # Prepare a dict for quick lookup by date string
+def get_calendar_grid(calendar_data, year, month):
+    from datetime import date
+    import calendar
+
     data_map = {item["date"]: item["hours_spent"] for item in calendar_data}
-
     today = date.today()
-    year, month = today.year, today.month
 
-    # Get month calendar weeks: each week is a list of 7 days (0 means no day)
     month_cal = calendar.monthcalendar(year, month)
 
     grid = []
@@ -89,10 +88,11 @@ def get_calendar_grid(calendar_data):
                     "day": day,
                     "hours_spent": data_map.get(iso_day, 0),
                     "is_today": day_date == today,
-                    "is_weekend": day_date.weekday() >= 5  # 5=Saturday, 6=Sunday
+                    "is_weekend": day_date.weekday() >= 5
                 })
         grid.append(week_list)
     return grid
+
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -271,23 +271,55 @@ def aggregate():
 @app.route("/calendar")
 @login_required
 def calendar_view():
+    # Get month/year from query params, or default to current
+    month = request.args.get("month", type=int)
+    year = request.args.get("year", type=int)
+
+    today = date.today()
+    if not month or not year:
+        month = today.month
+        year = today.year
+
+    # First and last day of the selected month
+    first_day = date(year, month, 1)
+    if month == 12:
+        last_day = date(year + 1, 1, 1)
+    else:
+        last_day = date(year, month + 1, 1)
+
     cur.execute("""
         SELECT 
             task_date, 
             SUM(EXTRACT(EPOCH FROM time_spent))/3600 AS hours_spent
         FROM tasks
-        WHERE task_date >= date_trunc('month', CURRENT_DATE)
-          AND task_date < (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month')
+        WHERE task_date >= %s
+          AND task_date < %s
           AND user_id = %s
         GROUP BY task_date
         ORDER BY task_date;
-    """, (current_user.user_id,))
+    """, (first_day, last_day, current_user.user_id))
     results = cur.fetchall()
 
     calendar_data = [{"date": row[0].isoformat(), "hours_spent": float(row[1])} for row in results]
-    calendar_grid = get_calendar_grid(calendar_data)
+    calendar_grid = get_calendar_grid(calendar_data, year, month)
 
-    return render_template("calendar.html", calendar_grid=calendar_grid)
+    # Calculate previous and next month/year
+    prev_month = month - 1 if month > 1 else 12
+    prev_year = year if month > 1 else year - 1
+    next_month = month + 1 if month < 12 else 1
+    next_year = year if month < 12 else year + 1
+
+    return render_template(
+        "calendar.html",
+        calendar_grid=calendar_grid,
+        year=year,
+        month=month,
+        prev_month=prev_month,
+        prev_year=prev_year,
+        next_month=next_month,
+        next_year=next_year,
+        calendar_mod=calendar  # needed to use month_name in Jinja
+    )
 
 
 
