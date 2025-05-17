@@ -63,7 +63,7 @@ Follow these steps to run the app locally or on a remote machine using Docker:
 
    Docker Compose will **prioritize variables** from the `.env` file over anything specified in the `environment` section, so you don't need to delete the defaults — they’ll be safely overridden.
 
-   To generate a secure secret key and append it to your `.env`, run:
+   To generate a secure secret key and append it to your `.env`, run: test xdd
 
    ```bash
    echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
