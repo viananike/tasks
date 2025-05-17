@@ -1,4 +1,4 @@
-name: Build and Push Docker image to GHCR
+name: Build and Push Docker images to GHCR
 
 on:
   push:
@@ -38,9 +38,18 @@ jobs:
             echo "tag=latest" >> $GITHUB_OUTPUT
           fi
 
-      - name: Build and push Docker image
+      # 🔵 Build and push app image
+      - name: Build and push app image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/tasks:${{ steps.meta.outputs.tag }}
+
+      # 🟣 Build and push custom Postgres image
+      - name: Build and push DB image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./db
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/tasks-db:${{ steps.meta.outputs.tag }}
