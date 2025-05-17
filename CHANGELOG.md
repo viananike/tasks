@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.1.5 - 2025-05-17
+
+- Merge branch 'main' of https://github.com/viananike/tasks (Viananike)%0A- chore: changing readme instructions (Viananike)%0A- chore: update changelog for v1.1.4 (github-actions)
+
 ## v1.1.4 - 2025-05-17
 
 - Merge branch 'main' of https://github.com/viananike/tasks (Viananike)%0A- chore: updating readme (Viananike)%0A- chore: update changelog for v1.1.3 (github-actions)
