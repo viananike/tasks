@@ -8,14 +8,14 @@ jobs:
   tag-and-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # needed to push tags & create release
+      contents: write
 
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # fetch full history for changelog and tagging
+          fetch-depth: 0
 
-      # 1️⃣ Calculate next SemVer tag (patch by default)
+      # 1️⃣ Calculate next SemVer tag
       - id: bump
         uses: mathieudutour/github-tag-action@v6.1
         with:
@@ -23,7 +23,15 @@ jobs:
           default_bump: patch
           release_branches: main
 
-      # 2️⃣ Update CHANGELOG.md with new version section
+      # 2️⃣ Generate release notes from commits
+      - name: Generate release notes
+        id: notes
+        run: |
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          git log --pretty=format:"- %s (%an)" $(git describe --tags --abbrev=0)..HEAD >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      # 3️⃣ Update CHANGELOG.md with new section
       - name: Update CHANGELOG.md
         uses: stefanzweifel/changelog-updater-action@v1
         with:
@@ -31,8 +39,9 @@ jobs:
           path-to-changelog: CHANGELOG.md
           compare-url-target-revision: HEAD
           parse-github-usernames: false
+          release-notes: ${{ steps.notes.outputs.release_notes }}
 
-      # 3️⃣ Commit and push updated CHANGELOG.md back to main
+      # 4️⃣ Commit and push updated CHANGELOG.md
       - name: Commit updated CHANGELOG
         run: |
           git config user.name "github-actions"
@@ -41,10 +50,10 @@ jobs:
           git commit -m "chore: update changelog for ${{ steps.bump.outputs.new_tag }}"
           git push origin main
 
-      # 4️⃣ Create GitHub Release
+      # 5️⃣ Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.bump.outputs.new_tag }}
           name: Release ${{ steps.bump.outputs.new_tag }}
-          body_path: CHANGELOG.md  # use changelog contents as release body
+          body_path: CHANGELOG.md
