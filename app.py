@@ -343,16 +343,36 @@ def admin_stats():
     if not current_user.is_admin:
         return "Access denied", 403
 
-    cur.execute("""
-        SELECT username, SUM(EXTRACT(EPOCH FROM time_spent)/60) AS total_minutes
-        FROM tasks
-        JOIN users ON tasks.user_id = users.user_id
-        GROUP BY username
-        ORDER BY total_minutes DESC
-    """)
-    user_stats = cur.fetchall()
+    # Total users
+    cur.execute("SELECT COUNT(*) FROM users")
+    user_count = cur.fetchone()[0]
 
-    return render_template("admin/stats.html", user_stats=user_stats)
+    # Total projects
+    cur.execute("SELECT COUNT(*) FROM projects")
+    project_count = cur.fetchone()[0]
+
+    # Total tasks
+    cur.execute("SELECT COUNT(*) FROM tasks")
+    task_count = cur.fetchone()[0]
+
+    # Admin users count
+    cur.execute("SELECT COUNT(*) FROM users WHERE is_admin = TRUE")
+    admin_count = cur.fetchone()[0]
+
+    # Tasks completed today
+    cur.execute("""
+        SELECT COUNT(*)
+        FROM tasks
+        WHERE status = 'completed' AND DATE(completed_at) = %s
+    """, (date.today(),))
+    tasks_today = cur.fetchone()[0]
+
+    return render_template("admin/stats.html",
+                           user_count=user_count,
+                           project_count=project_count,
+                           task_count=task_count,
+                           admin_count=admin_count,
+                           tasks_today=tasks_today)
 
 @app.route("/admin/projects", methods=["GET", "POST"])
 @login_required
