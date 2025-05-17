@@ -27,13 +27,9 @@ jobs:
       - name: Generate release notes
         id: notes
         run: |
-          {
-            echo 'release_notes<<EOF'
-            git log --pretty=format:"- %s (%an)" $(git describe --tags --abbrev=0)..HEAD
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
-
-
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          git log --pretty=format:"- %s (%an)" "$(git describe --tags --abbrev=0)"..HEAD >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       # 3️⃣ Update CHANGELOG.md with new section
       - name: Update CHANGELOG.md
