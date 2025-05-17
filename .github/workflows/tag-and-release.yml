@@ -27,6 +27,9 @@ jobs:
         uses: stefanzweifel/changelog-updater-action@v1
         with:
           latest-version: ${{ steps.bump.outputs.new_tag }}
+              path-to-changelog: CHANGELOG.md
+              compare-url-target-revision: HEAD
+              parse-github-usernames: false
 
       # 3️⃣ Commit and push updated CHANGELOG.md back to main
       - name: Commit updated CHANGELOG
