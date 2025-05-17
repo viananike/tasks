@@ -3,13 +3,14 @@
 {% block title %}Task Hours Aggregation{% endblock %}
 
 {% block content %}
-<h1>Task Aggregation View</h1>
+<h1 style="text-align: center; color: #BB86FC;">Task Aggregation View</h1>
 
 <div class="tables-wrapper" style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-top: 30px;">
+    
     <!-- Left Table: Current Month Task List -->
-    <div class="table-container" style="flex: 1; min-width: 300px; max-width: 600px;">
+    <div class="table-container" style="flex: 1 1 450px; max-width: 100%; overflow-x: auto;">
         <h2 style="text-align: center; color: #BB86FC;">Tasks for This Month</h2>
-        <table style="width: 100%; border-collapse: collapse; background-color: #2a2a2a; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+        <table style="width: 100%; min-width: 600px; border-collapse: collapse; background-color: #2a2a2a; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
             <thead>
                 <tr style="background-color: #3b3b3b;">
                     <th style="padding: 10px; color: #BB86FC;">Task</th>
@@ -34,9 +35,9 @@
     </div>
 
     <!-- Right Table: Monthly Aggregates -->
-    <div class="table-container" style="flex: 1; min-width: 300px; max-width: 400px;">
+    <div class="table-container" style="flex: 1 1 300px; max-width: 100%; overflow-x: auto;">
         <h2 style="text-align: center; color: #BB86FC;">Monthly Totals</h2>
-        <table style="width: 100%; border-collapse: collapse; background-color: #2a2a2a; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+        <table style="width: 100%; min-width: 300px; border-collapse: collapse; background-color: #2a2a2a; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
             <thead>
                 <tr style="background-color: #3b3b3b;">
                     <th style="padding: 10px; color: #BB86FC;">Month</th>
