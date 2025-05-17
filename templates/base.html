@@ -84,6 +84,19 @@
         text-align: center;
         color: #BB86FC;
     }
+
+    .sidebar h3 {
+        padding: 0 20px;
+        color: #888;
+        font-size: 14px;
+        margin: 10px 0 5px;
+    }
+
+    .sidebar hr {
+        border: none;
+        border-top: 1px solid #333;
+        margin: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -98,6 +111,8 @@
         <a href="/aggregate">📊 Aggregate</a>
         {% if current_user.is_authenticated %}
             {% if current_user.is_admin %}
+                <hr>
+                <h3>Admin</h3>
                 <a href="/admin/create_user">👤 Create User</a>
                 <a href="/admin/logs">📄 Logs</a>
                 <a href="/admin/stats">📈 Statistics</a>
