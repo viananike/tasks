@@ -25,26 +25,50 @@ Whether you're just trying to stay on top of your projects or you want to monito
 
 Follow these steps to run the app locally or on a remote machine using Docker:
 
-1. **Clone the repository**  
-   ```bash
-   git clone https://github.com/viananike/tasks.git
-   cd tasks
+1. **Copy this docker-compose.yml file**  
+   ```yaml
+   services:
+   tasks:
+      image: ghcr.io/viananike/tasks:latest
+      ports:
+         - "5000:5000"
+      env_file:
+         - .env
+      environment:
+         - SECRET_KEY=dev-key
+         - POSTGRES_USER=user
+         - POSTGRES_PASSWORD=changeme
+         - POSTGRES_DB=postgres
+      depends_on:
+         - db
+
+   db:
+      image: ghcr.io/viananike/tasks-db:latest
+      environment:
+         - POSTGRES_USER=user
+         - POSTGRES_PASSWORD=changeme
+         - POSTGRES_DB=postgres
+      volumes:
+         - postgres_data:/var/lib/postgresql/data
+      ports:
+         - "5432:5432"
+
+   volumes:
+     postgres_data:
+
    ```
-2. **Create a .env file**
-   
-   Copy the example file and fill in your own configuration values:
-   
-   ```bash
-   cp .env.example .env
-   ```
-   Run the following command to add a secret key to your .env:
+2. ⚠️ **Security Redommendations** ⚠️
+
+   The environment variables defined in the `docker-compose.yml` file are **default values**, primarily for convenience. **You should override them using a `.env` file** for better security and flexibility. An example file is provided as `.env.example`.
+
+   Docker Compose will **prioritize variables** from the `.env` file over anything specified in the `environment` section, so you don't need to delete the defaults — they’ll be safely overridden.
+
+   To generate a secure secret key and append it to your `.env`, run:
+
    ```bash
    echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
    ```
-   
-   ⚠️ **Security Tip**
-   
-   It is *strongly recommended* to change the default database credentials in your .env file. Make sure these values match what's defined under the db service in your docker-compose.yml
+
 
 3. **Run with docker:**
    ```bash

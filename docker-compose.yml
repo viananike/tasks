@@ -1,5 +1,5 @@
 services:
-  web:
+  tasks:
     image: ghcr.io/viananike/tasks:latest
     ports:
       - "5000:5000"
