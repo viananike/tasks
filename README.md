@@ -55,8 +55,6 @@ Follow these steps to run the app locally or on a remote machine using Docker:
 
    volumes:
      postgres_data:
-
-
    ```
 2. ⚠️ **Security Redommendations** ⚠️
 
