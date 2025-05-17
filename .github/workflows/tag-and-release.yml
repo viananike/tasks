@@ -8,11 +8,12 @@ jobs:
   tag-and-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write    # needed to push tags & create release
+      contents: write  # needed to push tags & create release
+
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # fetch tags
+          fetch-depth: 0  # fetch full history for changelog and tagging
 
       # 1️⃣ Calculate next SemVer tag (patch by default)
       - id: bump
@@ -27,9 +28,9 @@ jobs:
         uses: stefanzweifel/changelog-updater-action@v1
         with:
           latest-version: ${{ steps.bump.outputs.new_tag }}
-              path-to-changelog: CHANGELOG.md
-              compare-url-target-revision: HEAD
-              parse-github-usernames: false
+          path-to-changelog: CHANGELOG.md
+          compare-url-target-revision: HEAD
+          parse-github-usernames: false
 
       # 3️⃣ Commit and push updated CHANGELOG.md back to main
       - name: Commit updated CHANGELOG
@@ -46,4 +47,4 @@ jobs:
         with:
           tag_name: ${{ steps.bump.outputs.new_tag }}
           name: Release ${{ steps.bump.outputs.new_tag }}
-          body_path: CHANGELOG.md  # pull body directly from the file
+          body_path: CHANGELOG.md  # use changelog contents as release body
