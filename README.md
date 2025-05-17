@@ -28,33 +28,34 @@ Follow these steps to run the app locally or on a remote machine using Docker:
 1. **Copy this docker-compose.yml file**  
    ```yaml
    services:
-   tasks:
-      image: ghcr.io/viananike/tasks:latest
-      ports:
-         - "5000:5000"
-      env_file:
-         - .env
-      environment:
-         - SECRET_KEY=dev-key
-         - POSTGRES_USER=user
-         - POSTGRES_PASSWORD=changeme
-         - POSTGRES_DB=postgres
-      depends_on:
-         - db
+      tasks:
+         image: ghcr.io/viananike/tasks:latest
+         ports:
+            - "5000:5000"
+         env_file:
+            - .env
+         environment:
+            - SECRET_KEY=dev-key
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=changeme
+            - POSTGRES_DB=postgres
+         depends_on:
+            - db
 
-   db:
-      image: ghcr.io/viananike/tasks-db:latest
-      environment:
-         - POSTGRES_USER=user
-         - POSTGRES_PASSWORD=changeme
-         - POSTGRES_DB=postgres
-      volumes:
-         - postgres_data:/var/lib/postgresql/data
-      ports:
-         - "5432:5432"
+      db:
+         image: ghcr.io/viananike/tasks-db:latest
+         environment:
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=changeme
+            - POSTGRES_DB=postgres
+         volumes:
+            - postgres_data:/var/lib/postgresql/data
+         ports:
+            - "5432:5432"
 
    volumes:
      postgres_data:
+
 
    ```
 2. ⚠️ **Security Redommendations** ⚠️
