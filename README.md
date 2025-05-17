@@ -1,7 +1,7 @@
 # 📝 Tasks — A Simple & Powerful Task Tracker
 
 <div align="center">
-  <img src="Logo/horizontal.png" alt="App Logo" width="600" height="150"/>
+  <img src="Logo/horizontal.png" alt="App Logo" width="600" height="200"/>
 </div>
 
 Welcome to **Tasks**, a lightweight but powerful self-hostable task tracker built with Flask & Docker.  
