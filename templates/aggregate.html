@@ -3,59 +3,59 @@
 {% block title %}Task Hours Aggregation{% endblock %}
 
 {% block content %}
-        <h1>Task Aggregation View</h1>
-        <div class="tables-wrapper">
-            <!-- Left Table: Current Month Task List -->
-            <div class="table-container">
-                <h2>Tasks for This Month</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Task</th>
-                            <th>Comments</th>
-                            <th>Date</th>
-                            <th>Project</th>
-                            <th>Time (min)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for task in task_details %}
-                            <tr>
-                                <td>{{ task[0] }}</td>
-                                <td>{{ task[1] }}</td>
-                                <td>{{ task[2] }}</td>
-                                <td>{{ task[3] }}</td>
-                                <td>{{ task[4] }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+<h1>Task Aggregation View</h1>
 
-            <!-- Separator -->
-            <div class="separator"></div>
+<div class="tables-wrapper" style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-top: 30px;">
+    <!-- Left Table: Current Month Task List -->
+    <div class="table-container" style="flex: 1; min-width: 300px; max-width: 600px;">
+        <h2 style="text-align: center; color: #BB86FC;">Tasks for This Month</h2>
+        <table style="width: 100%; border-collapse: collapse; background-color: #2a2a2a; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+            <thead>
+                <tr style="background-color: #3b3b3b;">
+                    <th style="padding: 10px; color: #BB86FC;">Task</th>
+                    <th style="padding: 10px; color: #BB86FC;">Comments</th>
+                    <th style="padding: 10px; color: #BB86FC;">Date</th>
+                    <th style="padding: 10px; color: #BB86FC;">Project</th>
+                    <th style="padding: 10px; color: #BB86FC;">Time (min)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in task_details %}
+                    <tr style="border-bottom: 1px solid #444;">
+                        <td style="padding: 10px;">{{ task[0] }}</td>
+                        <td style="padding: 10px;">{{ task[1] }}</td>
+                        <td style="padding: 10px;">{{ task[2] }}</td>
+                        <td style="padding: 10px;">{{ task[3] }}</td>
+                        <td style="padding: 10px;">{{ task[4] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-            <!-- Right Table: Monthly Aggregates -->
-            <div class="table-container">
-                <h2>Monthly Totals</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Total Time (min)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in monthly_totals %}
-                            <tr>
-                                <td>{{ row[0]|format_month }}</td>
-                                <td>{{ row[1] }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <br>
-        <a href="/" class="link-button">Back to Home</a>
+    <!-- Right Table: Monthly Aggregates -->
+    <div class="table-container" style="flex: 1; min-width: 300px; max-width: 400px;">
+        <h2 style="text-align: center; color: #BB86FC;">Monthly Totals</h2>
+        <table style="width: 100%; border-collapse: collapse; background-color: #2a2a2a; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+            <thead>
+                <tr style="background-color: #3b3b3b;">
+                    <th style="padding: 10px; color: #BB86FC;">Month</th>
+                    <th style="padding: 10px; color: #BB86FC;">Total Time (min)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in monthly_totals %}
+                    <tr style="border-bottom: 1px solid #444;">
+                        <td style="padding: 10px;">{{ row[0]|format_month }}</td>
+                        <td style="padding: 10px;">{{ row[1] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="text-align: center; margin-top: 40px;">
+    <a href="/" class="link-button" style="background-color: #BB86FC; color: #121212; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">Back to Home</a>
+</div>
 {% endblock %}
