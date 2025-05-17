@@ -32,8 +32,8 @@ Follow these steps to run the app locally or on a remote machine using Docker:
          image: ghcr.io/viananike/tasks:latest
          ports:
             - "5000:5000"
-         env_file:
-            - .env
+         # env_file:
+         #    - .env
          environment:
             - SECRET_KEY=dev-key
             - POSTGRES_USER=user
